@@ -7,15 +7,23 @@
   <body>
     <h1>Traveler</h1>
 
-    <div id="trips-container">Trips</div>
+    <div id="trips-container">
+      <h4>Trips:</h4>
+      <div id='trips-list'>
+
+      </div>
+    </div>
+    <br>
 
     <form id="trip_form" action="#" method="post">
+      <label>Trip Name:</label>
+      <input type="text" name="name">
       <label>City: </label>
       <input id="city-input" type="text" name="city">
       <label>State (if necessary): </label>
       <input id="state-input" type="text" name="state" value="">
       <label>Country: </label>
-      <input id="country-input" type="text" name="country" value="">
+      <input id="country-input" type="text" name="country">
       <input type="submit" name="" value="Submit!">
     </form>
 

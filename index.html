@@ -3,19 +3,12 @@
   <head>
     <meta charset="utf-8">
     <title>Traveler</title>
+    <link rel="stylesheet" href="index.css">
   </head>
   <body>
     <h1>Traveler</h1>
-
-    <div id="trips-container">
-      <h4>Trips:</h4>
-      <div id='trips-list'>
-
-      </div>
-    </div>
-    <br>
-
-    <form id="trip_form" action="#" method="post">
+    <button id="add-trip">ADD A NEW TRIP</button>
+    <form id="trip-form" action="#" method="post">
       <label>Trip Name:</label>
       <input type="text" name="name">
       <label>City: </label>
@@ -26,6 +19,16 @@
       <input id="country-input" type="text" name="country">
       <input type="submit" name="" value="Submit!">
     </form>
+
+
+    <div id="trips-container">
+      <h4>Trips:</h4>
+      <div id='trips-list'>
+
+      </div>
+    </div>
+    <br>
+
 
 
     <script src="key.js"></script>

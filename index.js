@@ -15,22 +15,49 @@ document.addEventListener("DOMContentLoaded", function(){
 
   //##################CREATING TRIP FORM
 
-  let form = document.getElementById('trip_form')
+
+
+  let form = document.getElementById('trip-form')
   form.addEventListener('submit', function(e){
     e.preventDefault()
-    let city = e.target.children[1].value
-    let state = e.target.children[3].value
-    let country = e.target.children[1].value
+    let name = e.target.children[1].value
+    let city = e.target.children[3].value
+    let state = e.target.children[5].value
+    let country = e.target.children[7].value
 
+    //#########REFACTOR LATER
+    let tripElement = document.createElement('div')
+    if(state === ""){
+      tripElement.innerHTML = (`
+        <h5>${name}</h5>
+        <p>${city} - ${country}</p>
+        <button id='add-events'>Add Events!</button>
+        <br>
+        `)
+    }
+    else{
+      tripElement.innerHTML = (`
+        <h5>${name}</h5>
+        <p>${city}, ${state} - ${country}</p>
+        <button id='add-events'>Add Events!</button>
+        <br>
+        `)
+    }
+    tripsList.append(tripElement)
+
+
+    // debugger
     fetch(RAILS_TRIP_API, {
       method: "POST",
       body: JSON.stringify({
+        name: name,
         city: city,
         state: state,
         country: country
       }),
       headers: {'Content-Type': 'application/json'}
-    }).then(()=> form.reset())
+    }).then(form.reset())
+    .then(form.style.visibility = 'hidden')
   })
 
 
@@ -38,12 +65,12 @@ document.addEventListener("DOMContentLoaded", function(){
 
   let tripsList = document.getElementById('trips-list')
   let getTrips = () => {
-    fetch(RAILS_TRIP_API)
+    return fetch(RAILS_TRIP_API)
     .then(resp => resp.json())
-    .then(json => renderTrips(json))
   }
 
   let renderTrips = (json) => {
+    tripsList.innerHTML = ""
     json.forEach(function(trip){
       let tripElement = document.createElement('div')
       if(trip.state === ""){
@@ -65,7 +92,12 @@ document.addEventListener("DOMContentLoaded", function(){
       tripsList.append(tripElement)
     })
   }
-getTrips()
+getTrips().then(json => renderTrips(json))
+//##############SHOW TRIP FORM ON PAGE
 
+let addTripButton = document.getElementById('add-trip')
+addTripButton.addEventListener('click', function(){
+  form.style.visibility = 'visible'
+})
 
 })

@@ -1,5 +1,6 @@
 const BASE_URL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?"
 const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips"
+const userId = 1
 document.addEventListener("DOMContentLoaded", function(){
 
   //#################TESTING YELP API
@@ -25,35 +26,23 @@ document.addEventListener("DOMContentLoaded", function(){
     let state = e.target.children[5].value
     let country = e.target.children[7].value
 
+    let newTrip = new Trip(name, city, state, country, userId)
+
     //#########REFACTOR LATER
     let tripElement = document.createElement('div')
-    if(state === ""){
-      tripElement.innerHTML = (`
-        <h5>${name}</h5>
-        <p>${city} - ${country}</p>
-        <button id='add-events'>Add Events!</button>
-        <br>
-        `)
-    }
-    else{
-      tripElement.innerHTML = (`
-        <h5>${name}</h5>
-        <p>${city}, ${state} - ${country}</p>
-        <button id='add-events'>Add Events!</button>
-        <br>
-        `)
-    }
+
+    tripElement.innerHTML = newTrip.render()
+
     tripsList.append(tripElement)
 
-
-    // debugger
     fetch(RAILS_TRIP_API, {
       method: "POST",
       body: JSON.stringify({
         name: name,
         city: city,
         state: state,
-        country: country
+        country: country,
+        user_id: userId
       }),
       headers: {'Content-Type': 'application/json'}
     }).then(form.reset())
@@ -73,6 +62,8 @@ document.addEventListener("DOMContentLoaded", function(){
     tripsList.innerHTML = ""
     json.forEach(function(trip){
       let tripElement = document.createElement('div')
+      console.log(trip)
+      // tripElement.innerHTML = trip.render()
       if(trip.state === ""){
         tripElement.innerHTML = (`
           <h5>${trip.name}</h5>

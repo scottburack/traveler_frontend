@@ -25,7 +25,7 @@ let Trip = (() => {
         return (`
           <h5>${this.name}</h5>
           <p>${this.city} - ${this.country}</p>
-          <button id='add-events'>Add Events!</button>
+          <button data-id='${this.id}' class='add-events'>Add Events!</button>
           <br>
           `
         )
@@ -34,7 +34,7 @@ let Trip = (() => {
         return (`
           <h5>${this.name}</h5>
           <p>${this.city}, ${this.state} - ${this.country}</p>
-          <button id='add-events'>Add Events!</button>
+          <button data-id='${this.id}' class='add-events'>Add Events!</button>
           <br>
           `
         )

@@ -1,5 +1,6 @@
 const BASE_URL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?"
 const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips"
+const RAILS_EVENT_API = "http://localhost:3000/api/v1/events"
 const userId = 1
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -28,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
     let newTrip = new Trip(name, city, state, country, userId)
 
-    //#########REFACTOR LATER
+
     let tripElement = document.createElement('div')
 
     tripElement.innerHTML = newTrip.render()
@@ -63,32 +64,57 @@ document.addEventListener("DOMContentLoaded", function(){
     json.forEach(function(trip){
       let tripElement = document.createElement('div')
       console.log(trip)
-      // tripElement.innerHTML = trip.render()
-      if(trip.state === ""){
-        tripElement.innerHTML = (`
-          <h5>${trip.name}</h5>
-          <p>${trip.city} - ${trip.country}</p>
-          <button id='add-events'>Add Events!</button>
-          <br>
-          `)
-      }
-      else{
-        tripElement.innerHTML = (`
-          <h5>${trip.name}</h5>
-          <p>${trip.city}, ${trip.state} - ${trip.country}</p>
-          <button id='add-events'>Add Events!</button>
-          <br>
-          `)
-      }
+        let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
+        tripElement.innerHTML = newTrip.render()
       tripsList.append(tripElement)
     })
   }
-getTrips().then(json => renderTrips(json))
+getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
 //##############SHOW TRIP FORM ON PAGE
 
 let addTripButton = document.getElementById('add-trip')
 addTripButton.addEventListener('click', function(){
   form.style.visibility = 'visible'
 })
+
+
+//#################RENDER EVENT FORM
+function addEventListenersToAddEventButtons(){
+  let eventButtons = document.getElementsByClassName('add-events')
+  let eventButtonsArray = Array.from(eventButtons)
+  eventButtonsArray.forEach(function(button){
+    button.addEventListener('click', function(e){
+      let eventForm = document.getElementById('trip-event-form')
+      eventForm.style.visibility = 'visible'
+      eventForm.dataset.id = e.target.dataset.id
+    submitFormEvent()
+    })
+  })
+}
+
+function submitFormEvent(){
+  let eventForm = document.getElementById('trip-event-form')
+  eventForm.addEventListener('submit', postEventData)
+}
+
+function postEventData(e){
+  e.preventDefault()
+  let eventName = e.target.children[1].value
+  let eventCategory;
+  let eventCategories = e.target.children[3].children
+  for(let i = 0; i < eventCategories.length; i++){
+    if(eventCategories[i].checked){
+      // console.log(`${eventCategories[i].value} was checked.`)
+       eventCategory = eventCategories[i].value
+    }
+  }
+  console.log(eventCategory)
+  let tripId = e.target.dataset.id
+  fetch(RAILS_EVENT_API, {
+    method: "POST",
+    body: JSON.stringify({name: eventName, category: eventCategory, trip_id: tripId}),
+    headers: {'Content-Type': 'application/json'}
+  })
+}
 
 })

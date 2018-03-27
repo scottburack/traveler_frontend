@@ -7,6 +7,7 @@
   </head>
   <body>
     <h1>Traveler</h1>
+    <!-- ADDING A NEW TRIP -->
     <button id="add-trip">ADD A NEW TRIP</button>
     <form id="trip-form" action="#" method="post">
       <label>Trip Name:</label>
@@ -17,6 +18,22 @@
       <input id="state-input" type="text" name="state" value="">
       <label>Country: </label>
       <input id="country-input" type="text" name="country">
+      <input type="submit" name="" value="Submit!">
+    </form>
+
+<!-- ADDING EVENTS TO TRIP -->
+    <form data-id="" id="trip-event-form" action="#" method="post">
+      <label>Name:</label>
+      <input type="text" name="name">
+      <label>Category: </label>
+      <div>
+      <input type='radio' name="category" value='bars'>Bars</input>
+      <input type='radio' name="category" value='restaurants'>Restaurant</input>
+      <input type='radio' name="category" value='museums'>Museum</input>
+      <input type='radio' name="category" value='parks'>Parks</input>
+    </div>
+      <!-- <input id="category" type="text" name="category"> -->
+
       <input type="submit" name="" value="Submit!">
     </form>
 

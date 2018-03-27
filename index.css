@@ -1,3 +1,7 @@
 #trip-form {
   visibility: hidden;
 }
+
+#trip-event-form {
+  visibility: hidden;
+}

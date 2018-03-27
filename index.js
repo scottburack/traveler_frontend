@@ -2,7 +2,10 @@ const BASE_URL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/bu
 const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips/"
 const RAILS_EVENT_API = "http://localhost:3000/api/v1/events/"
 const userId = 1
+let showContainer = document.getElementById('show-container')
 document.addEventListener("DOMContentLoaded", function(){
+
+
 
 
 //#####################RENDER TRIPS TO PAGE
@@ -24,7 +27,40 @@ document.addEventListener("DOMContentLoaded", function(){
     })
   }
 
-  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
+  /////// RENDERING EVENTS FOR SPECIFIC TRIP
+  function tripNameTesting() {
+    let tripNames = document.getElementsByClassName("trip-name")
+    for (let i = 0; i < tripNames.length; i++) {
+      tripNames[i].addEventListener("click", function(e) {
+        showContainer.innerHTML = ""
+        let tripId = e.target.parentElement.children[2].dataset.id
+        fetch(RAILS_TRIP_API + tripId + '/' + 'events')
+        .then(resp => resp.json())
+        .then(json => renderTripEvents(json))
+      })
+    }
+  }
+
+  function renderTripEvents(json) {
+    json.forEach(function(json){
+      let eventName = json.name
+      let eventCategory = json.category
+      let eventImageURL = json.imgURL
+      let eventURL = json.url
+      let eventDiv = document.createElement('div')
+      eventDiv.innerHTML =
+        `<h3>${eventName}</h3>
+        <p>${eventCategory}</p>
+        <img src=${eventImageURL}
+        `
+      showContainer.append(eventDiv)
+    })
+
+  }
+
+  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => tripNameTesting())
+
+
 
   //##################CREATING TRIP FORM
   let form = document.getElementById('trip-form')
@@ -121,16 +157,17 @@ function getYelpResults(name, category, json) {
 }
 
 function renderEvents(json, tripId){
-  let yelpResults = document.getElementById('yelp-results')
+
   // debugger
+  showContainer.innerHTML = ""
   json.businesses.forEach(function(event){
     let placeDiv = document.createElement('div')
     placeDiv.innerHTML = (`
-      <h3><a href=${event.url}>${event.name}</a></h3>
+      <h3><a href=${event.url} target="_blank">${event.name}</a></h3>
       <img class='event-img' src=${event.image_url}>
       <button data-id=${tripId} class='add-event'>Add Event To Your Trip!</button>
       `)
-      yelpResults.append(placeDiv)
+      showContainer.append(placeDiv)
   })
 
   let eventButtons = document.getElementsByClassName('add-event')
@@ -164,7 +201,14 @@ function addEventToTrip(e){
     }),
     headers: {'Content-Type': 'application/json'}
   })
+
+  event.target.style.visibility = "hidden"
 }
+
+
+
+
+
 
 
 })

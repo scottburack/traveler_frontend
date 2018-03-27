@@ -4,37 +4,41 @@ const RAILS_EVENT_API = "http://localhost:3000/api/v1/events/"
 const userId = 1
 document.addEventListener("DOMContentLoaded", function(){
 
-  //#################TESTING YELP API
-  fetch(BASE_URL + 'location=long?beach', {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${API_KEY}`
-    }
-  })
-  .then(resp => resp.json())
-  .then(json => console.log(json))
 
+//#####################RENDER TRIPS TO PAGE
+  let tripsList = document.getElementById('trips-list')
+  let getTrips = () => {
+    return fetch(RAILS_TRIP_API)
+    .then(resp => resp.json())
+  }
+
+  let renderTrips = (json) => {
+    tripsList.innerHTML = ""
+    json.forEach(function(trip){
+
+      let tripElement = document.createElement('div')
+
+        let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
+        tripElement.innerHTML = newTrip.render()
+      tripsList.append(tripElement)
+    })
+  }
+
+  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
 
   //##################CREATING TRIP FORM
-
-
-
   let form = document.getElementById('trip-form')
   form.addEventListener('submit', function(e){
     e.preventDefault()
+
     let name = e.target.children[1].value
     let city = e.target.children[3].value
     let state = e.target.children[5].value
     let country = e.target.children[7].value
-
-    let newTrip = new Trip(name, city, state, country, userId)
-
-
-    let tripElement = document.createElement('div')
-
-    tripElement.innerHTML = newTrip.render()
-
-    tripsList.append(tripElement)
+    // let newTrip = new Trip(name, city, state, country, userId)
+    // let tripElement = document.createElement('div')
+    // tripElement.innerHTML = newTrip.render()
+    // tripsList.append(tripElement)
 
     fetch(RAILS_TRIP_API, {
       method: "POST",
@@ -46,30 +50,14 @@ document.addEventListener("DOMContentLoaded", function(){
         user_id: userId
       }),
       headers: {'Content-Type': 'application/json'}
-    }).then(form.reset())
+    }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
+    .then(form.reset())
     .then(form.style.visibility = 'hidden')
   })
 
 
-  //#####################RENDER TRIPS TO PAGE
 
-  let tripsList = document.getElementById('trips-list')
-  let getTrips = () => {
-    return fetch(RAILS_TRIP_API)
-    .then(resp => resp.json())
-  }
 
-  let renderTrips = (json) => {
-    tripsList.innerHTML = ""
-    json.forEach(function(trip){
-      let tripElement = document.createElement('div')
-      console.log(trip)
-        let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
-        tripElement.innerHTML = newTrip.render()
-      tripsList.append(tripElement)
-    })
-  }
-getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
 //##############SHOW TRIP FORM ON PAGE
 
 let addTripButton = document.getElementById('add-trip')
@@ -87,19 +75,20 @@ function addEventListenersToAddEventButtons(){
       let eventForm = document.getElementById('trip-event-form')
       eventForm.style.visibility = 'visible'
       eventForm.dataset.id = e.target.dataset.id
-      submitFormEvent()
+      submitFormEvent(eventForm)
     })
   })
 }
 
-function submitFormEvent(){
-  let eventForm = document.getElementById('trip-event-form')
+function submitFormEvent(eventForm){
+
   eventForm.addEventListener('submit', getInfoFromEventForm)
 
 }
 
 function getInfoFromEventForm(e){
   e.preventDefault()
+
   let submitBtnId = e.target.dataset.id
   let eventName = e.target.children[1].value
   let eventCategory;
@@ -118,7 +107,9 @@ function getInfoFromEventForm(e){
 function getYelpResults(name, category, json) {
   let tripId = json.id
   let yelpURL;
-  json.state === "" ?  yelpURL = `location=${json.city}?${json.country}&` : yelpURL = `location=${json.city}?${json.state}?${json.country}&`
+  // debugger
+  (json.state === "") ?  yelpURL = `location=${json.city}?${json.country}&` : yelpURL = `location=${json.city}?${json.state}?${json.country}&`
+  // console.log(json.id)
   fetch(BASE_URL + yelpURL + `term=${category}`, {
     method: 'GET',
     headers: {
@@ -126,17 +117,54 @@ function getYelpResults(name, category, json) {
     }
   })
   .then(resp => resp.json())
-  .then(json => console.log(json))
+  .then(json => renderEvents(json, tripId))
 }
 
+function renderEvents(json, tripId){
+  let yelpResults = document.getElementById('yelp-results')
+  // debugger
+  json.businesses.forEach(function(event){
+    let placeDiv = document.createElement('div')
+    placeDiv.innerHTML = (`
+      <h3><a href=${event.url}>${event.name}</a></h3>
+      <img class='event-img' src=${event.image_url}>
+      <button data-id=${tripId} class='add-event'>Add Event To Your Trip!</button>
+      `)
+      yelpResults.append(placeDiv)
+  })
 
+  let eventButtons = document.getElementsByClassName('add-event')
+  for(let i = 0; i < eventButtons.length; i++){
+    eventButtons[i].addEventListener('click', addEventToTrip)
+  }
+}
 
-  // let tripId = e.target.dataset.id
-  // console.log(tripId)
-  // fetch(RAILS_EVENT_API, {
-  //   method: "POST",
-  //   body: JSON.stringify({name: eventName, category: eventCategory, trip_id: tripId}),
-  //   headers: {'Content-Type': 'application/json'}
-  // })
+//#########ADD EVENT-LISTENER TO ADD EVENT BUTTONS
+function addEventToTrip(e){
+
+  let eventName = e.target.parentElement.children[0].children[0].innerHTML
+  let eventURL = e.target.parentElement.children[0].children[0].href
+  let imgURL = e.target.parentElement.children[1].src
+  let tripId = e.target.dataset.id
+  let eventCategory
+  let radioButtons = document.getElementById('radio-buttons').children
+  for(let i = 0; i < radioButtons.length; i++){
+    if(radioButtons[i].checked){
+       eventCategory = radioButtons[i].value
+    }
+  }
+  fetch(RAILS_EVENT_API, {
+    method: 'POST',
+    body: JSON.stringify({
+      name: eventName,
+      url: eventURL,
+      imgURL: imgURL,
+      trip_id: tripId,
+      category: eventCategory
+    }),
+    headers: {'Content-Type': 'application/json'}
+  })
+}
+
 
 })

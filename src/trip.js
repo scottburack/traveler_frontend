@@ -1,5 +1,5 @@
 let Trip = (() => {
-
+  // let id
   return class Trip {
 
     constructor (id, name, city, state, country, userId) {
@@ -8,7 +8,7 @@ let Trip = (() => {
       this.state = state
       this.country = country
       this.userId = userId
-      this.id  = id
+      this.id = id
 
     }
 
@@ -21,7 +21,7 @@ let Trip = (() => {
         return (`
           <h5>${this.name}</h5>
           <p>${this.city} - ${this.country}</p>
-          <button class='add-events'>Add Events!</button>
+          <button data-id=${this.id} class='add-events'>Add Events!</button>
           <br>
           `
         )

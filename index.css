@@ -5,3 +5,7 @@
 #trip-event-form {
   visibility: hidden;
 }
+
+.event-img {
+  max-width: 25%;
+}

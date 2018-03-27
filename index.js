@@ -1,6 +1,6 @@
 const BASE_URL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search?"
-const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips"
-const RAILS_EVENT_API = "http://localhost:3000/api/v1/events"
+const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips/"
+const RAILS_EVENT_API = "http://localhost:3000/api/v1/events/"
 const userId = 1
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -87,34 +87,56 @@ function addEventListenersToAddEventButtons(){
       let eventForm = document.getElementById('trip-event-form')
       eventForm.style.visibility = 'visible'
       eventForm.dataset.id = e.target.dataset.id
-    submitFormEvent()
+      submitFormEvent()
     })
   })
 }
 
 function submitFormEvent(){
   let eventForm = document.getElementById('trip-event-form')
-  eventForm.addEventListener('submit', postEventData)
+  eventForm.addEventListener('submit', getInfoFromEventForm)
+
 }
 
-function postEventData(e){
+function getInfoFromEventForm(e){
   e.preventDefault()
+  let submitBtnId = e.target.dataset.id
   let eventName = e.target.children[1].value
   let eventCategory;
   let eventCategories = e.target.children[3].children
   for(let i = 0; i < eventCategories.length; i++){
     if(eventCategories[i].checked){
-      // console.log(`${eventCategories[i].value} was checked.`)
        eventCategory = eventCategories[i].value
     }
   }
-  console.log(eventCategory)
-  let tripId = e.target.dataset.id
-  fetch(RAILS_EVENT_API, {
-    method: "POST",
-    body: JSON.stringify({name: eventName, category: eventCategory, trip_id: tripId}),
-    headers: {'Content-Type': 'application/json'}
-  })
+  fetch(RAILS_TRIP_API + submitBtnId)
+  .then(resp => resp.json())
+  .then(json => getYelpResults(eventName, eventCategory, json))
+  // get location from trip form that was clicked
 }
+
+function getYelpResults(name, category, json) {
+  let tripId = json.id
+  let yelpURL;
+  json.state === "" ?  yelpURL = `location=${json.city}?${json.country}&` : yelpURL = `location=${json.city}?${json.state}?${json.country}&`
+  fetch(BASE_URL + yelpURL + `term=${category}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${API_KEY}`
+    }
+  })
+  .then(resp => resp.json())
+  .then(json => console.log(json))
+}
+
+
+
+  // let tripId = e.target.dataset.id
+  // console.log(tripId)
+  // fetch(RAILS_EVENT_API, {
+  //   method: "POST",
+  //   body: JSON.stringify({name: eventName, category: eventCategory, trip_id: tripId}),
+  //   headers: {'Content-Type': 'application/json'}
+  // })
 
 })

@@ -7,10 +7,8 @@ const userId = 1
 
 
 let showContainer = document.getElementById('show-container')
+let tripEventForm = document.getElementById("trip-event-form")
 document.addEventListener("DOMContentLoaded", function(){
-
-
-
 
 //#####################RENDER TRIPS TO PAGE
   let tripsList = document.getElementById('trips-list')
@@ -24,10 +22,24 @@ document.addEventListener("DOMContentLoaded", function(){
     json.forEach(function(trip){
 
       let tripElement = document.createElement('div')
+      tripElement.className = "trip-div"
         let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
+
         tripElement.innerHTML = newTrip.render()
+
       tripsList.append(tripElement)
     })
+    let colorCodes = ['#A0E4FE', '#0B76C4', '#FF5669', '#F8DD6E', '#FFDCD9', '#EBF2F5']
+    let colorCounter = 0
+    for(let i = 0; i < tripsList.children.length; i++){
+
+      // console.log(tripsList.children[i])
+      // tripsList.children[i].style.backgroundColor = 'black'
+      // debugger
+      tripsList.children[i].style.backgroundColor = colorCodes[colorCounter]
+      colorCounter === 5 ? colorCounter = 0 : colorCounter++
+
+    }
   }
 
   /////// RENDERING EVENTS FOR SPECIFIC TRIP
@@ -36,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function(){
     for (let i = 0; i < tripNames.length; i++) {
       tripNames[i].addEventListener("click", function(e) {
         showContainer.innerHTML = ""
+        tripEventForm.style.display = 'none'
         // debugger
         let tripId = e.target.parentElement.children[1].dataset.id
         fetch(RAILS_TRIP_API + tripId + '/' + 'events')
@@ -61,11 +74,12 @@ document.addEventListener("DOMContentLoaded", function(){
       let eventDiv = document.createElement('div')
       eventDiv.className = 'event-info'
       eventDiv.dataset.id = json.id
+
       eventDiv.innerHTML =
-        `<h3><a href=${eventURL} target='_blank'>${eventName}</a></h3>
-        <p>${eventCategory}</p>
+        `
+        <span><h3><a href=${eventURL} target='_blank'>${eventName}</a></h3><i class="fa fa-trash-o event-trash-button"></i></span>
+        <p>Category: ${eventCategory}</p>
         <img class='event-img' src=${eventImageURL}>
-        <i class="fa fa-trash-o event-trash-button"></i>
         `
       showContainer.append(eventDiv)
     })
@@ -120,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function(){
       headers: {'Content-Type': 'application/json'}
     }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
     .then(form.reset())
-    .then(form.style.visibility = 'hidden')
+    .then(form.style.display = 'none')
   })
 
 
@@ -131,6 +145,7 @@ document.addEventListener("DOMContentLoaded", function(){
 let addTripButton = document.getElementById('add-trip')
 addTripButton.addEventListener('click', function(){
   form.style.display = 'block'
+  tripEventForm.style.display = 'none'
 })
 
 
@@ -148,6 +163,7 @@ function addEventListenersToAddEventButtons(){
       currentEventCategory = undefined
       eventForm = document.getElementById('trip-event-form')
       eventForm.style.display = 'block'
+      form.style.display = 'none'
       eventForm.dataset.id = e.target.dataset.id
       submitFormEvent(eventForm)
     })
@@ -177,6 +193,12 @@ function getInfoFromEventForm(e){
     }
   }
   e.target.style.display = 'none'
+  let eventDivs = document.getElementsByClassName('trip-info')
+  for (let i = 0; i < eventDivs.length; i++) {
+    if (eventDivs[i].dataset.id !== e.target.dataset.id) {
+      eventDivs[i].style.display = 'none'
+    }
+  }
   fetch(RAILS_TRIP_API + submitBtnId)
   .then(resp => resp.json())
   .then(json => {
@@ -302,7 +324,14 @@ function addEventListenersToDeleteTripButtons(){
   }
 }
 
-
+let allTripsButton = document.getElementById('all-trips')
+allTripsButton.addEventListener('click', function(){
+  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
+  showContainer.innerHTML = ""
+  form.style.display = 'none'
+  tripEventForm = document.getElementById("trip-event-form")
+  tripEventForm.style.display = 'none'
+})
 
 
 

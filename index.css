@@ -1,3 +1,8 @@
+
+body * {
+  font-family: 'Libre Baskerville', sans-serif;
+}
+
 #trip-form {
   /* visibility: hidden; */
   display: none;
@@ -9,8 +14,22 @@
 }
 
 .event-img {
-  width: 25%;
+  width: 50%;
+  padding: 15px;
 }
+
+.event-info{
+  background-color: #fecd2f;
+  margin: 10px;
+  text-align: center;
+}
+
+.event-info:hover{
+  transform: scale(1.02);
+
+}
+
+
 
 .add-events {
   max-width: 15%;
@@ -32,17 +51,29 @@
   display: inline-block;
   margin-left: 40%;
 }
+.event-inline{
+  display: inline-block;
+}
 
 #trips-list > div:nth-child(odd) {
   background-color: grey;
 }
 
 .trip-info:hover {
-  background-color: red;
+  /* background-color: red; */
   /* filter: brightness(85%); */
   /* opacity: .5; */
 }
 
+.trip-div:hover {
+  -webkit-filter: brightness(125%);
+
+}
+
 .bottom-span {
   display: block;
+}
+
+.trip-info {
+  padding-top: 25px;
 }

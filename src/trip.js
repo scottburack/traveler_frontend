@@ -19,7 +19,7 @@ let Trip = (() => {
     render() {
         if(this.state === ""){
         return (`
-          <div class='trip-info'>
+          <div class='trip-info' data-id=${this.id}>
           <span>
             <h2 class="inline trip-name">${this.name}</h2>
             <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
@@ -35,7 +35,7 @@ let Trip = (() => {
         }
         else{
         return (`
-          <div class="trip-info">
+          <div class="trip-info" data-id=${this.id}>
           <span>
             <h2 class="inline trip-name">${this.name}</h2>
             <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>

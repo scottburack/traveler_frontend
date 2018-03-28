@@ -41,6 +41,13 @@ document.addEventListener("DOMContentLoaded", function(){
         fetch(RAILS_TRIP_API + tripId + '/' + 'events')
         .then(resp => resp.json())
         .then(json => renderTripEvents(json))
+
+        let eventDivs = document.getElementsByClassName('trip-info')
+        for (let i = 0; i < eventDivs.length; i++) {
+          if (eventDivs[i].dataset.id !== e.target.parentElement.parentElement.dataset.id) {
+            eventDivs[i].style.display = 'none'
+          }
+        }
       })
     }
   }
@@ -52,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function(){
       let eventImageURL = json.imgURL
       let eventURL = json.url
       let eventDiv = document.createElement('div')
+      eventDiv.className = 'event-info'
       eventDiv.dataset.id = json.id
       eventDiv.innerHTML =
         `<h3><a href=${eventURL} target='_blank'>${eventName}</a></h3>
@@ -218,6 +226,7 @@ function renderEvents(json, tripId){
   showContainer.innerHTML = ""
   json.businesses.forEach(function(event){
     let placeDiv = document.createElement('div')
+    placeDiv.className = 'event-info'
     placeDiv.innerHTML = (`
       <h3><a href=${event.url} target="_blank">${event.name}</a></h3>
       <img class='event-img' src=${event.image_url}>

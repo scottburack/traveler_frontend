@@ -53,14 +53,31 @@ document.addEventListener("DOMContentLoaded", function(){
       let eventImageURL = json.imgURL
       let eventURL = json.url
       let eventDiv = document.createElement('div')
+      eventDiv.dataset.id = json.id
       eventDiv.innerHTML =
         `<h3><a href=${eventURL} target='_blank'>${eventName}</a></h3>
         <p>${eventCategory}</p>
-        <img src=${eventImageURL}
+        <img src=${eventImageURL}>
+        <i class="fa fa-trash-o event-trash-button"></i>
         `
       showContainer.append(eventDiv)
     })
 
+    let eventTrashBtns = document.getElementsByClassName('event-trash-button')
+    for (let i = 0; i < eventTrashBtns.length; i++) {
+      eventTrashBtns[i].addEventListener('click', deleteEvent)
+    }
+  }
+
+  function deleteEvent(e) {
+    let confirmation = confirm('Are you sure you want to delete this event?')
+    if (confirmation) {
+      let eventId = e.target.parentElement.dataset.id
+      e.target.parentElement.remove()
+      fetch(RAILS_EVENT_API + eventId, {
+        method: 'DELETE'
+      })
+    }
   }
 
   getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
@@ -68,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
   //##################CREATING TRIP FORM
+
   let form = document.getElementById('trip-form')
   form.addEventListener('submit', function(e){
     e.preventDefault()
@@ -146,7 +164,7 @@ function getInfoFromEventForm(e){
        currentEventCategory = eventCategory
     }
   }
-
+  e.target.style.visibility = 'hidden'
   fetch(RAILS_TRIP_API + submitBtnId)
   .then(resp => resp.json())
   .then(json => {
@@ -178,6 +196,15 @@ function nextPageEvents(e){
   yelpApiLimit = 15
   getYelpResults(currentEventName, currentEventCategory, currentJson)
 }
+
+function previousPageEvents(e){
+  console.log(e.target)
+  yelpApiOffset -= 15
+  yelpApiLimit = 15
+  getYelpResults(currentEventName, currentEventCategory, currentJson)
+}
+
+
 function renderEvents(json, tripId){
   showContainer.innerHTML = ""
   json.businesses.forEach(function(event){
@@ -193,10 +220,19 @@ function renderEvents(json, tripId){
   for(let i = 0; i < eventButtons.length; i++){
     eventButtons[i].addEventListener('click', addEventToTrip)
   }
+
+  let previousPageBtn = document.createElement('button')
+  previousPageBtn.innerText = "Previous Page"
+  previousPageBtn.addEventListener('click', previousPageEvents)
+  if (yelpApiOffset >= 15) {
+    showContainer.append(previousPageBtn)
+  }
+
   let nextPageBtn = document.createElement('button')
-  nextPageBtn.innerText = "More Results"
+  nextPageBtn.innerText = "Next Page"
   nextPageBtn.addEventListener('click', nextPageEvents)
   showContainer.append(nextPageBtn)
+
 }
 
 //#########ADD EVENT-LISTENER TO ADD EVENT BUTTONS
@@ -231,10 +267,13 @@ function addEventToTrip(e){
 function deleteTrip(e){
   let tripId = e.target.dataset.id
   let tripDiv = e.target.parentElement
-  tripDiv.remove()
-  fetch(RAILS_TRIP_API + tripId, {
-    method: "DELETE"
-  })
+  let confirmation = confirm('Are you sure you want to delete this trip?')
+  if (confirmation) {
+    tripDiv.remove()
+    fetch(RAILS_TRIP_API + tripId, {
+      method: "DELETE"
+    })
+  }
 }
 let deleteTripButtons = document.getElementsByClassName('trash-button')
 function addEventListenersToDeleteTripButtons(){

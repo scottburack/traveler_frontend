@@ -4,9 +4,16 @@
     <meta charset="utf-8">
     <title>Traveler</title>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
-    <h1>Traveler</h1>
+    <div class='main'>
+      <!-- MAIN IS HOLDING EVERYTHING EXCEPT SIDEBAR -->
+      <nav class="navbar navbar-dark bg-primary">
+        <span class="navbar-brand mb-0 h1"><h1>Traveler</h1></span>
+      </nav>
+
     <!-- ADDING A NEW TRIP -->
     <button id="add-trip">ADD A NEW TRIP</button>
     <form id="trip-form" action="#" method="post">
@@ -22,7 +29,7 @@
     </form>
 
 <!-- ADDING EVENTS TO TRIP -->
-    <form data-id="" id="trip-event-form" action="#" method="post">
+    <form data-id="" id="trip-event-form" action="#" method="post" class="top">
       <label>Name:</label>
       <input type="text" name="name">
       <label>Category: </label>
@@ -31,18 +38,21 @@
       <input type='radio' name="category" value='restaurants'>Restaurant</input>
       <input type='radio' name="category" value='museums'>Museum</input>
       <input type='radio' name="category" value='parks'>Parks</input>
+      <input type='radio' name="category" value='landmarks'>Landmarks</input>
     </div>
       <!-- <input id="category" type="text" name="category"> -->
 
       <input type="submit" name="" value="Submit!">
     </form>
 
-    <div id="show-container">
+    <div id="show-container" class="main">
 
     </div>
+</div>
 
+<!-- END OF MAIN-THIS IS THE SIDEBAR -->
 
-    <div id="trips-container">
+    <div id="trips-container" class="sidenav">
       <h4>Trips:</h4>
       <div id='trips-list'>
 

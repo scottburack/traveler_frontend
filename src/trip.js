@@ -20,6 +20,7 @@ let Trip = (() => {
         if(this.state === ""){
         return (`
           <h3 class="trip-name">${this.name}</h3>
+          <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
           <p>${this.city} - ${this.country}</p>
           <button data-id=${this.id} class='add-events'>Add Events!</button>
           <br>
@@ -29,6 +30,7 @@ let Trip = (() => {
         else{
         return (`
           <h3 class="trip-name">${this.name}</h3>
+          <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
           <p>${this.city}, ${this.state} - ${this.country}</p>
           <button data-id=${this.id} class='add-events'>Add Events!</button>
           <br>

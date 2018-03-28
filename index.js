@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   /////// RENDERING EVENTS FOR SPECIFIC TRIP
-  function tripNameTesting() {
+  function getTripEvents() {
     let tripNames = document.getElementsByClassName("trip-name")
     for (let i = 0; i < tripNames.length; i++) {
       tripNames[i].addEventListener("click", function(e) {
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function(){
       let eventURL = json.url
       let eventDiv = document.createElement('div')
       eventDiv.innerHTML =
-        `<h3>${eventName}</h3>
+        `<h3><a href=${eventURL} target='_blank'>${eventName}</a></h3>
         <p>${eventCategory}</p>
         <img src=${eventImageURL}
         `
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
   }
 
-  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => tripNameTesting())
+  getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
 
 
 
@@ -201,11 +201,24 @@ function addEventToTrip(e){
     }),
     headers: {'Content-Type': 'application/json'}
   })
-
   event.target.style.visibility = "hidden"
 }
 
-
+//##############DELETING TRIPS
+function deleteTrip(e){
+  let tripId = e.target.dataset.id
+  let tripDiv = e.target.parentElement
+  tripDiv.remove()
+  fetch(RAILS_TRIP_API + tripId, {
+    method: "DELETE"
+  })
+}
+let deleteTripButtons = document.getElementsByClassName('trash-button')
+function addEventListenersToDeleteTripButtons(){
+  for(let i = 0; i < deleteTripButtons.length; i++){
+    deleteTripButtons[i].addEventListener('click', deleteTrip)
+  }
+}
 
 
 

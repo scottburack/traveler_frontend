@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function(){
     json.forEach(function(trip){
 
       let tripElement = document.createElement('div')
-
         let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
         tripElement.innerHTML = newTrip.render()
       tripsList.append(tripElement)
@@ -57,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function(){
       eventDiv.innerHTML =
         `<h3><a href=${eventURL} target='_blank'>${eventName}</a></h3>
         <p>${eventCategory}</p>
-        <img src=${eventImageURL}>
+        <img class='event-img' src=${eventImageURL}>
         <i class="fa fa-trash-o event-trash-button"></i>
         `
       showContainer.append(eventDiv)
@@ -111,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function(){
         user_id: userId
       }),
       headers: {'Content-Type': 'application/json'}
-    }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons())
+    }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
     .then(form.reset())
     .then(form.style.visibility = 'hidden')
   })
@@ -123,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 let addTripButton = document.getElementById('add-trip')
 addTripButton.addEventListener('click', function(){
-  form.style.visibility = 'visible'
+  form.style.display = 'block'
 })
 
 
@@ -140,7 +139,7 @@ function addEventListenersToAddEventButtons(){
       currentEventName = undefined
       currentEventCategory = undefined
       eventForm = document.getElementById('trip-event-form')
-      eventForm.style.visibility = 'visible'
+      eventForm.style.display = 'block'
       eventForm.dataset.id = e.target.dataset.id
       submitFormEvent(eventForm)
     })
@@ -169,7 +168,7 @@ function getInfoFromEventForm(e){
        currentEventCategory = eventCategory
     }
   }
-  e.target.style.visibility = 'hidden'
+  e.target.style.display = 'none'
   fetch(RAILS_TRIP_API + submitBtnId)
   .then(resp => resp.json())
   .then(json => {
@@ -272,13 +271,13 @@ function addEventToTrip(e){
     }),
     headers: {'Content-Type': 'application/json'}
   })
-  event.target.style.visibility = "hidden"
+  event.target.style.display = "none"
 }
 
 //##############DELETING TRIPS
 function deleteTrip(e){
   let tripId = e.target.dataset.id
-  let tripDiv = e.target.parentElement
+  let tripDiv = e.target.parentElement.parentElement
   let confirmation = confirm('Are you sure you want to delete this trip?')
   if (confirmation) {
     tripDiv.remove()

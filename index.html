@@ -10,12 +10,12 @@
   <body>
     <div class='main'>
       <!-- MAIN IS HOLDING EVERYTHING EXCEPT SIDEBAR -->
-      <nav class="navbar navbar-dark bg-primary">
+      <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
         <span class="navbar-brand mb-0 h1"><h1>Traveler</h1></span>
+        <button class='btn btn-primary' id="add-trip">ADD A NEW TRIP</button>
       </nav>
 
     <!-- ADDING A NEW TRIP -->
-    <button id="add-trip">ADD A NEW TRIP</button>
     <form id="trip-form" action="#" method="post">
       <label>Trip Name:</label>
       <input type="text" name="name">
@@ -52,8 +52,7 @@
 
 <!-- END OF MAIN-THIS IS THE SIDEBAR -->
 
-    <div id="trips-container" class="sidenav">
-      <h4>Trips:</h4>
+    <div id="trips-container">
       <div id='trips-list'>
 
       </div>

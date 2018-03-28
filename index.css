@@ -1,53 +1,39 @@
 #trip-form {
-  visibility: hidden;
+  /* visibility: hidden; */
+  display: none;
 }
 
 #trip-event-form {
-  visibility: hidden;
+  /* visibility: hidden; */
+  display: none;
 }
 
 .event-img {
   max-width: 25%;
 }
 
-.sidenav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
-    width: 160px; /* Set the width of the sidebar */
-    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
-    z-index: 1; /* Stay on top */
-    top: 0; /* Stay at the top */
-    left: 0;
-    background-color: grey;
-    /* border-style: solid; */
-    overflow-y: scroll;
-    padding-top: 20px;
+
+
+.add-events {
+  max-width: 15%;
+  text-align: center;
 }
 
-.trash-button:hover {
-  color: white;
-}
-/* The navigation menu links */
-.sidenav a {
-    padding: 6px 8px 6px 16px;
-    text-decoration: none;
-    font-size: 25px;
-    color: #818181;
-    display: block;
+.inline {
+  display: inline-block;
+  margin-left: 40%;
 }
 
-/* When you mouse over the navigation links, change their color */
-.sidenav a:hover {
-    color: #f1f1f1;
+#trips-list > div:nth-child(odd) {
+  background-color: grey;
 }
 
-/* Style page content */
-.main {
-    margin-left: 160px; /* Same as the width of the sidebar */
-    /* padding: 0px 10px; */
+.trip-info:hover {
+  background-color: red;
+  /* filter: brightness(85%); */
+  /* opacity: .5; */
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
-@media screen and (max-height: 450px) {
-    .sidenav {padding-top: 15px;}
-    .sidenav a {font-size: 18px;}
+.bottom-span {
+  display: block;
 }

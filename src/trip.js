@@ -19,21 +19,33 @@ let Trip = (() => {
     render() {
         if(this.state === ""){
         return (`
-          <h3 class="trip-name">${this.name}</h3>
-          <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
-          <p>${this.city} - ${this.country}</p>
-          <button data-id=${this.id} class='add-events'>Add Events!</button>
+          <div class='trip-info'>
+          <span>
+            <h2 class="inline trip-name">${this.name}</h2>
+            <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
+          </span>
+          <span class='bottom-span'>
+            <p class="inline">${this.city} - ${this.country}</p>
+            <button data-id=${this.id} class='add-events'>Add Events!</button>
+          </span>
           <br>
+          </div>
           `
         )
         }
         else{
         return (`
-          <h3 class="trip-name">${this.name}</h3>
-          <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
-          <p>${this.city}, ${this.state} - ${this.country}</p>
-          <button data-id=${this.id} class='add-events'>Add Events!</button>
+          <div class="trip-info">
+          <span>
+            <h2 class="inline trip-name">${this.name}</h2>
+            <i data-id=${this.id} class="fa fa-trash-o trash-button"></i>
+          </span>
+          <span class='bottom-span'>
+            <p class="inline">${this.city}, ${this.state} - ${this.country}</p>
+            <button data-id=${this.id} class='add-events'>Add Events!</button>
+          </span>
           <br>
+          </div>
           `
         )
         }

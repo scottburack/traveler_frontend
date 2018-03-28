@@ -69,6 +69,8 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
+  ////// DELETE EVENT ////////
+
   function deleteEvent(e) {
     let confirmation = confirm('Are you sure you want to delete this event?')
     if (confirmation) {
@@ -84,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 
 
-  //##################CREATING TRIP FORM
+  //################## CREATING TRIP FORM
 
   let form = document.getElementById('trip-form')
   form.addEventListener('submit', function(e){
@@ -126,6 +128,7 @@ addTripButton.addEventListener('click', function(){
 
 
 //#################RENDER EVENT FORM
+
 function addEventListenersToAddEventButtons(){
   let eventButtons = document.getElementsByClassName('add-events')
   let eventButtonsArray = Array.from(eventButtons)
@@ -149,6 +152,8 @@ function submitFormEvent(eventForm){
   eventForm.addEventListener('submit', getInfoFromEventForm)
 
 }
+
+//////// COLLECTING INFO FROM EVENT FORM ////////
 
 function getInfoFromEventForm(e){
   e.preventDefault()
@@ -174,6 +179,8 @@ function getInfoFromEventForm(e){
   // get location from trip form that was clicked
 }
 
+////////// CALLING YELP API WITH EVENT AND TRIP LOCATION INFO ////////
+
 function getYelpResults(name, category, json) {
   let tripId = json.id
   let yelpURL;
@@ -190,6 +197,8 @@ function getYelpResults(name, category, json) {
   .then(json => renderEvents(json, tripId))
 }
 
+/////// LOGIC FOR NEXT AND PREVIOUS YELP PAGE RESULTS ///////
+
 function nextPageEvents(e){
   console.log(e.target)
   yelpApiOffset += 15
@@ -204,6 +213,7 @@ function previousPageEvents(e){
   getYelpResults(currentEventName, currentEventCategory, currentJson)
 }
 
+/////// SHOWING YELP RESULTS FOR EVENTS ///////
 
 function renderEvents(json, tripId){
   showContainer.innerHTML = ""
@@ -220,6 +230,8 @@ function renderEvents(json, tripId){
   for(let i = 0; i < eventButtons.length; i++){
     eventButtons[i].addEventListener('click', addEventToTrip)
   }
+
+  ////// EVENT LISTENERS FOR NEXT AND PREVIOUS PAGE BUTTONS ///////
 
   let previousPageBtn = document.createElement('button')
   previousPageBtn.innerText = "Previous Page"

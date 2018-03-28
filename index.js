@@ -2,6 +2,10 @@ const BASE_URL = "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/bu
 const RAILS_TRIP_API = "http://localhost:3000/api/v1/trips/"
 const RAILS_EVENT_API = "http://localhost:3000/api/v1/events/"
 const userId = 1
+
+
+
+
 let showContainer = document.getElementById('show-container')
 document.addEventListener("DOMContentLoaded", function(){
 
@@ -33,7 +37,8 @@ document.addEventListener("DOMContentLoaded", function(){
     for (let i = 0; i < tripNames.length; i++) {
       tripNames[i].addEventListener("click", function(e) {
         showContainer.innerHTML = ""
-        let tripId = e.target.parentElement.children[2].dataset.id
+        // debugger
+        let tripId = e.target.parentElement.children[1].dataset.id
         fetch(RAILS_TRIP_API + tripId + '/' + 'events')
         .then(resp => resp.json())
         .then(json => renderTripEvents(json))
@@ -108,7 +113,12 @@ function addEventListenersToAddEventButtons(){
   let eventButtonsArray = Array.from(eventButtons)
   eventButtonsArray.forEach(function(button){
     button.addEventListener('click', function(e){
-      let eventForm = document.getElementById('trip-event-form')
+      yelpApiOffset = 0
+      yelpApiLimit = 15
+      currentJson = undefined
+      currentEventName = undefined
+      currentEventCategory = undefined
+      eventForm = document.getElementById('trip-event-form')
       eventForm.style.visibility = 'visible'
       eventForm.dataset.id = e.target.dataset.id
       submitFormEvent(eventForm)
@@ -127,16 +137,22 @@ function getInfoFromEventForm(e){
 
   let submitBtnId = e.target.dataset.id
   let eventName = e.target.children[1].value
+  currentEventName = eventName
   let eventCategory;
   let eventCategories = e.target.children[3].children
   for(let i = 0; i < eventCategories.length; i++){
     if(eventCategories[i].checked){
        eventCategory = eventCategories[i].value
+       currentEventCategory = eventCategory
     }
   }
+
   fetch(RAILS_TRIP_API + submitBtnId)
   .then(resp => resp.json())
-  .then(json => getYelpResults(eventName, eventCategory, json))
+  .then(json => {
+    currentJson = json
+    getYelpResults(eventName, eventCategory, json)}
+)
   // get location from trip form that was clicked
 }
 
@@ -146,7 +162,7 @@ function getYelpResults(name, category, json) {
   // debugger
   (json.state === "") ?  yelpURL = `location=${json.city}?${json.country}&` : yelpURL = `location=${json.city}?${json.state}?${json.country}&`
   // console.log(json.id)
-  fetch(BASE_URL + yelpURL + `term=${category}`, {
+  fetch(BASE_URL + yelpURL + `term=${category}&offset=${yelpApiOffset}&limit=${yelpApiLimit}` , {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${API_KEY}`
@@ -156,9 +172,13 @@ function getYelpResults(name, category, json) {
   .then(json => renderEvents(json, tripId))
 }
 
+function nextPageEvents(e){
+  console.log(e.target)
+  yelpApiOffset += 15
+  yelpApiLimit = 15
+  getYelpResults(currentEventName, currentEventCategory, currentJson)
+}
 function renderEvents(json, tripId){
-
-  // debugger
   showContainer.innerHTML = ""
   json.businesses.forEach(function(event){
     let placeDiv = document.createElement('div')
@@ -169,11 +189,14 @@ function renderEvents(json, tripId){
       `)
       showContainer.append(placeDiv)
   })
-
   let eventButtons = document.getElementsByClassName('add-event')
   for(let i = 0; i < eventButtons.length; i++){
     eventButtons[i].addEventListener('click', addEventToTrip)
   }
+  let nextPageBtn = document.createElement('button')
+  nextPageBtn.innerText = "More Results"
+  nextPageBtn.addEventListener('click', nextPageEvents)
+  showContainer.append(nextPageBtn)
 }
 
 //#########ADD EVENT-LISTENER TO ADD EVENT BUTTONS

@@ -36,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
       tripsList.children[i].style.backgroundColor = colorCodes[colorCounter]
       colorCounter === 5 ? colorCounter = 0 : colorCounter++
-
     }
   }
 
@@ -74,9 +73,14 @@ document.addEventListener("DOMContentLoaded", function(){
 
       eventDiv.innerHTML =
         `
-        <span><h3><a href=${eventURL} target='_blank'>${eventName}</a></h3><i class="fa fa-trash-o event-trash-button"></i></span>
+        <a class='image-link' href=${eventURL} target='_blank'>
         <p>Category: ${eventCategory}</p>
-        <img class='event-img' src=${eventImageURL}>
+        <div class='event-img'>
+        <img src=${eventImageURL}>
+        <figcaption class="polaroid-caption">${eventName}</figcaption>
+        </a>
+        <i class="fa fa-trash-o event-trash-button"></i>
+        </div>
         `
       showContainer.append(eventDiv)
     })
@@ -214,7 +218,10 @@ function getYelpResults(name, category, json) {
   // debugger
   (json.state === "") ?  yelpURL = `location=${json.city}?${json.country}&` : yelpURL = `location=${json.city}?${json.state}?${json.country}&`
   // console.log(json.id)
-  fetch(BASE_URL + yelpURL + `term=${category}&offset=${yelpApiOffset}&limit=${yelpApiLimit}` , {
+  let term;
+  (name === "") ? term = `term=${category}` : term = `term=${name}&${category}`
+
+  fetch(BASE_URL + yelpURL + `${term}&offset=${yelpApiOffset}&limit=${yelpApiLimit}` , {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${API_KEY}`
@@ -248,9 +255,16 @@ function renderEvents(json, tripId){
     let placeDiv = document.createElement('div')
     placeDiv.className = 'event-info'
     placeDiv.innerHTML = (`
-      <h3><a href=${event.url} target="_blank">${event.name}</a></h3>
-      <img class='event-img' src=${event.image_url}>
-      <button data-id=${tripId} class='add-event'>Add Event To Your Trip!</button>
+
+      <div class='nested-event-info'>
+        <a class='image-link' href=${event.url} target="_blank">
+          <div class='event-img'>
+            <img alt='trip-photo' src=${event.image_url}>
+              <figcaption>${event.name}</figcaption>
+            </a>
+        </div>
+        <button data-id=${tripId} class='add-event'>Add Event To Your Trip!</button>
+      </div>
       `)
       showContainer.append(placeDiv)
   })
@@ -277,10 +291,9 @@ function renderEvents(json, tripId){
 
 //#########ADD EVENT-LISTENER TO ADD EVENT BUTTONS
 function addEventToTrip(e){
-
-  let eventName = e.target.parentElement.children[0].children[0].innerHTML
-  let eventURL = e.target.parentElement.children[0].children[0].href
-  let imgURL = e.target.parentElement.children[1].src
+  let eventName = e.target.parentElement.children[1].children[0].children[1].innerText
+  let eventURL = e.target.parentElement.children[0].href
+  let imgURL = e.target.parentElement.children[1].children[0].children[0].src
   let tripId = e.target.dataset.id
   let eventCategory
   let radioButtons = document.getElementById('radio-buttons').children

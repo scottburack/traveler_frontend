@@ -95,8 +95,9 @@ document.addEventListener("DOMContentLoaded", function(){
   function deleteEvent(e) {
     let confirmation = confirm('Are you sure you want to delete this event?')
     if (confirmation) {
-      let eventId = e.target.parentElement.dataset.id
-      e.target.parentElement.remove()
+      let eventId = e.target.parentElement.parentElement.dataset.id
+      // debugger
+      e.target.parentElement.parentElement.remove()
       fetch(RAILS_EVENT_API + eventId, {
         method: 'DELETE'
       })

@@ -5,9 +5,13 @@
     <title>Traveler</title>
     <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville" rel="stylesheet">
     <link rel="stylesheet" href="index.css">
+    <!-- BOOTSTRAP STYLE SHEETS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+    <!-- SEMANTIC UI STYLESHEETS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
   </head>
   <body>
     <div class='main'>
@@ -21,7 +25,8 @@
       </nav>
 
     <!-- ADDING A NEW TRIP -->
-    <form id="trip-form" action="#" method="post">
+
+    <!-- <form id="trip-form" class="ui form" action="#" method="post">
       <label>Trip Name:</label>
       <input type="text" name="name">
       <label>City: </label>
@@ -30,25 +35,82 @@
       <input id="state-input" type="text" name="state" value="">
       <label>Country: </label>
       <input id="country-input" type="text" name="country">
-      <input type="submit" name="" value="Submit!">
-    </form>
+      <input type="submit" class='ui button' name="" value="Submit!">
+    </form> -->
+
+    <div class="ui modal trips">
+      <i class="close icon"></i>
+      <div class="header">
+        Profile Picture
+      </div>
+      <div class="image content">
+        <div class="ui medium image">
+          <img src="/images/avatar/large/chris.jpg">
+        </div>
+        <div class="description">
+          <form id="trip-form" class="ui form" action="#" method="post">
+            <label>Trip Name:</label>
+            <input type="text" name="name">
+            <label>City: </label>
+            <input id="city-input" type="text" name="city">
+            <label>State (if necessary): </label>
+            <input id="state-input" type="text" name="state" value="">
+            <label>Country: </label>
+            <input id="country-input" type="text" name="country">
+            <div class="actions">
+            <input type="submit" class='ui button' name="" value="Submit!">
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+
+</div>
+
 
 <!-- ADDING EVENTS TO TRIP -->
-    <form data-id="" id="trip-event-form" action="#" method="post" class="top">
-      <label>Name:</label>
-      <input type="text" name="name">
-      <label>Category: </label>
-      <div id='radio-buttons'>
-      <input type='radio' name="category" value='bars'>Bars</input>
-      <input type='radio' name="category" value='restaurants'>Restaurant</input>
-      <input type='radio' name="category" value='museums'>Museum</input>
-      <input type='radio' name="category" value='parks'>Parks</input>
-      <input type='radio' name="category" value='landmarks'>Landmarks</input>
-    </div>
-      <!-- <input id="category" type="text" name="category"> -->
 
-      <input type="submit" name="" value="Submit!">
-    </form>
+    <div id="add-trip-form" class="ui modal events">
+      <i class="close icon"></i>
+      <div class="header">
+        Profile Picture
+      </div>
+      <div class="image content">
+        <div class="ui medium image">
+          <img src="/images/avatar/large/chris.jpg">
+        </div>
+        <div class="description">
+          <form data-id="" id="trip-event-form" class='ui form' action="#" method="post" class="top">
+            <label>Name:</label>
+            <input type="text" name="name">
+            <label>Category: </label>
+            <div id='radio-buttons'>
+            <input type='radio' name="category" value='bars'>Bars</input>
+            <input type='radio' name="category" value='restaurants'>Restaurant</input>
+            <input type='radio' name="category" value='museums'>Museum</input>
+            <input type='radio' name="category" value='parks'>Parks</input>
+            <input type='radio' name="category" value='landmarks'>Landmarks</input>
+          </div>
+            <!-- <input id="category" type="text" name="category"> -->
+            <div class="actions">
+
+              <!-- <div class="ui positive right labeled icon button"> -->
+
+                <input type="submit" class='ui positive right labeled icon button' name="" value="Submit!">
+                <!-- <i class="checkmark icon"></i> -->
+              <!-- </div> -->
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+
+</div>
+  <!-- </div> -->
+
+
 
     <div id="trips-container">
       <div id='trips-list'>
@@ -61,8 +123,6 @@
 
     </div>
 </div>
-
-<!-- END OF MAIN-THIS IS THE SIDEBAR -->
 
 
 

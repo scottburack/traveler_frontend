@@ -27,7 +27,7 @@ let Trip = (() => {
           <span class='bottom-span'>
             <p class="inline">${this.city} - ${this.country}</p>
             <br>
-            <button data-id=${this.id} class='add-events btn btn-light'>Add Events!</button>
+            <button data-id=${this.id} id="first" class='add-events btn btn-light'>Add Events!</button>
           </span>
           <br>
           </div>

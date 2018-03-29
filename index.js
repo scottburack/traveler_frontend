@@ -33,9 +33,7 @@ document.addEventListener("DOMContentLoaded", function(){
     let colorCounter = 0
     for(let i = 0; i < tripsList.children.length; i++){
 
-      // console.log(tripsList.children[i])
-      // tripsList.children[i].style.backgroundColor = 'black'
-      // debugger
+
       tripsList.children[i].style.backgroundColor = colorCodes[colorCounter]
       colorCounter === 5 ? colorCounter = 0 : colorCounter++
 
@@ -48,8 +46,7 @@ document.addEventListener("DOMContentLoaded", function(){
     for (let i = 0; i < tripNames.length; i++) {
       tripNames[i].addEventListener("click", function(e) {
         showContainer.innerHTML = ""
-        tripEventForm.style.display = 'none'
-        // debugger
+        // tripEventForm.style.display = 'block'
         let tripId = e.target.parentElement.children[1].dataset.id
         fetch(RAILS_TRIP_API + tripId + '/' + 'events')
         .then(resp => resp.json())
@@ -118,10 +115,6 @@ document.addEventListener("DOMContentLoaded", function(){
     let city = e.target.children[3].value
     let state = e.target.children[5].value
     let country = e.target.children[7].value
-    // let newTrip = new Trip(name, city, state, country, userId)
-    // let tripElement = document.createElement('div')
-    // tripElement.innerHTML = newTrip.render()
-    // tripsList.append(tripElement)
 
     fetch(RAILS_TRIP_API, {
       method: "POST",
@@ -135,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function(){
       headers: {'Content-Type': 'application/json'}
     }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
     .then(form.reset())
-    .then(form.style.display = 'none')
+    .then(form.style.display = 'block')
   })
 
 
@@ -145,9 +138,11 @@ document.addEventListener("DOMContentLoaded", function(){
 
 let addTripButton = document.getElementById('add-trip')
 addTripButton.addEventListener('click', function(){
-  form.style.display = 'block'
-  tripEventForm.style.display = 'none'
-})
+
+    console.log('yoooo')
+		$(".ui.modal.trips").modal('show');
+
+});
 
 
 //#################RENDER EVENT FORM
@@ -157,14 +152,16 @@ function addEventListenersToAddEventButtons(){
   let eventButtonsArray = Array.from(eventButtons)
   eventButtonsArray.forEach(function(button){
     button.addEventListener('click', function(e){
+
+  		$(".ui.modal.events").modal('show');
       yelpApiOffset = 0
       yelpApiLimit = 15
       currentJson = undefined
       currentEventName = undefined
       currentEventCategory = undefined
       eventForm = document.getElementById('trip-event-form')
-      eventForm.style.display = 'block'
-      form.style.display = 'none'
+      // eventForm.style.display = 'block'
+      // form.style.display = 'block'
       eventForm.dataset.id = e.target.dataset.id
       submitFormEvent(eventForm)
     })
@@ -193,7 +190,7 @@ function getInfoFromEventForm(e){
        currentEventCategory = eventCategory
     }
   }
-  e.target.style.display = 'none'
+  e.target.style.display = 'block'
   let eventDivs = document.getElementsByClassName('trip-info')
   for (let i = 0; i < eventDivs.length; i++) {
     if (eventDivs[i].dataset.id !== e.target.dataset.id) {
@@ -329,11 +326,9 @@ let allTripsButton = document.getElementById('all-trips')
 allTripsButton.addEventListener('click', function(){
   getTrips().then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())
   showContainer.innerHTML = ""
-  form.style.display = 'none'
+  // form.style.display = 'block'
   tripEventForm = document.getElementById("trip-event-form")
-  tripEventForm.style.display = 'none'
+  // tripEventForm.style.display = 'block'
 })
-
-
 
 })

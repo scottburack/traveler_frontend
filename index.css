@@ -5,12 +5,12 @@ body * {
 
 #trip-form {
   /* visibility: hidden; */
-  display: none;
+  /* display: none; */
 }
 
 #trip-event-form {
   /* visibility: hidden; */
-  display: none;
+  /* display: none; */
 }
 
 .event-img {

@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       let tripElement = document.createElement('div')
       tripElement.className = "trip-div"
+      tripElement.dataset.id = trip.id
         let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
 
         tripElement.innerHTML = newTrip.render()
@@ -41,20 +42,23 @@ document.addEventListener("DOMContentLoaded", function(){
 
   /////// RENDERING EVENTS FOR SPECIFIC TRIP
   function getTripEvents() {
-    let tripNames = document.getElementsByClassName("trip-name")
-    for (let i = 0; i < tripNames.length; i++) {
-      tripNames[i].addEventListener("click", function(e) {
-        showContainer.innerHTML = ""
+    let tripDivs = document.getElementsByClassName("trip-div")
+    // debugger
+    for (let i = 0; i < tripDivs.length; i++) {
+      tripDivs[i].addEventListener("click", function(e) {
+        if(e.target.tagName !== "BUTTON" && e.target.tagName !== "I"){
+          showContainer.innerHTML = ""
         // tripEventForm.style.display = 'block'
-        let tripId = e.target.parentElement.children[1].dataset.id
-        fetch(RAILS_TRIP_API + tripId + '/' + 'events')
-        .then(resp => resp.json())
-        .then(json => renderTripEvents(json))
+          let tripId = e.target.parentElement.children[1].dataset.id
+          fetch(RAILS_TRIP_API + tripId + '/' + 'events')
+          .then(resp => resp.json())
+          .then(json => renderTripEvents(json))
 
-        let eventDivs = document.getElementsByClassName('trip-info')
-        for (let i = 0; i < eventDivs.length; i++) {
-          if (eventDivs[i].dataset.id !== e.target.parentElement.parentElement.dataset.id) {
-            eventDivs[i].style.display = 'none'
+          let eventDivs = document.getElementsByClassName('trip-info')
+          for (let i = 0; i < eventDivs.length; i++) {
+            if (eventDivs[i].dataset.id !== e.target.parentElement.parentElement.dataset.id) {
+              eventDivs[i].style.display = 'none'
+            }
           }
         }
       })
@@ -157,7 +161,7 @@ function addEventListenersToAddEventButtons(){
   eventButtonsArray.forEach(function(button){
     button.addEventListener('click', function(e){
 
-  		$(".ui.modal.events").modal('show');
+  		$(".ui.small.modal.events").modal('show');
       yelpApiOffset = 0
       yelpApiLimit = 15
       currentJson = undefined
@@ -260,10 +264,10 @@ function renderEvents(json, tripId){
         <a class='image-link' href=${event.url} target="_blank">
           <div class='event-img'>
             <img alt='trip-photo' src=${event.image_url}>
-              <figcaption>${event.name}</figcaption>
+              <figcaption class='polaroid-caption'>${event.name}</figcaption>
             </a>
         </div>
-        <button data-id=${tripId} class='add-event'>Add Event To Your Trip!</button>
+        <button data-id=${tripId} class='add-event ui grey button'>Add Event To Your Trip!</button>
       </div>
       `)
       showContainer.append(placeDiv)

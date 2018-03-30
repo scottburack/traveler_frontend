@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function(){
       let tripElement = document.createElement('div')
       tripElement.className = "trip-div"
       tripElement.dataset.id = trip.id
-        let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId)
+        let newTrip = new Trip(trip.id, trip.name, trip.city, trip.state, trip.country, trip.userId, trip.start_date, trip.end_date)
 
         tripElement.innerHTML = newTrip.render()
 
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function(){
         <img src=${eventImageURL}>
         <figcaption class="polaroid-caption">${eventName}</figcaption>
         </a>
-        <i class="fa fa-trash-o event-trash-button"></i>
+        <i class="fa fa-trash-o event-trash-button trash alternate outline icon"></i>
         </div>
         `
       showContainer.append(eventDiv)
@@ -123,6 +123,8 @@ document.addEventListener("DOMContentLoaded", function(){
     let city = e.target.children[3].value
     let state = e.target.children[5].value
     let country = e.target.children[7].value
+    let startDate = e.target.children[9].value
+    let endDate = e.target.children[11].value
 
     fetch(RAILS_TRIP_API, {
       method: "POST",
@@ -131,7 +133,9 @@ document.addEventListener("DOMContentLoaded", function(){
         city: city,
         state: state,
         country: country,
-        user_id: userId
+        user_id: userId,
+        start_date: startDate,
+        end_date: endDate
       }),
       headers: {'Content-Type': 'application/json'}
     }).then(() => getTrips()).then(json => renderTrips(json)).then(() => addEventListenersToAddEventButtons()).then(() => getTripEvents()).then(() => addEventListenersToDeleteTripButtons())

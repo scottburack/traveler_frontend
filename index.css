@@ -61,6 +61,10 @@ div.actions {
 .trip-div:hover{
   cursor: pointer;
 }
+/* 
+.trip-div {
+  margin-top: -20px;
+} */
 
 .polaroid-caption{
   padding-top: 5%;
@@ -68,26 +72,6 @@ div.actions {
   font-size: 2em;
 }
 
-#trip-form {
-  /* visibility: hidden; */
-  /* display: none; */
-}
-
-#trip-event-form {
-  /* visibility: hidden; */
-  /* display: none; */
-}
-
-/* .event-img {
-  width: 60%;
-  height: 60%;
-  padding: 15px;
-
-
-} */
-/* .polaroid {
-  position: relative;
-} */
 img {
   width: 100%;
   height: 100%;
@@ -200,4 +184,8 @@ img {
 
 .trip-info {
   padding-top: 25px;
+}
+
+.bottom-span.inline.bold {
+  font-weight: bold;
 }

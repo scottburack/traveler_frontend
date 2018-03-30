@@ -57,11 +57,7 @@ div.actions {
 .navbar-light .navbar-brand {
     color: rgba(0,0,0,.9);
 }
-
-.trip-div:hover{
-  cursor: pointer;
-}
-/* 
+/*
 .trip-div {
   margin-top: -20px;
 } */
@@ -122,6 +118,8 @@ img {
   margin: 10px;
   text-align: center;
   /* border-radius: 50%; */
+  /* display: grid;
+  grid-template-columns: repeat(3, 1fr); */
 }
 
 
@@ -149,6 +147,8 @@ img {
   grid-template-columns: repeat(3, 1fr);
 }
 
+
+
 /* .event-info {
  display: grid;
  float: left;
@@ -163,9 +163,11 @@ img {
   display: inline-block;
 }
 
-#trips-list > div:nth-child(odd) {
+/* #trips-list > div:nth-child(odd) {
   background-color: grey;
-}
+} */
+
+
 
 .trip-info:hover {
   /* background-color: red; */
@@ -175,7 +177,13 @@ img {
 
 .trip-div:hover {
   -webkit-filter: brightness(125%);
+    cursor: pointer;
+  }
 
+}
+
+.event-category-div{
+  display: none;
 }
 
 .bottom-span {
@@ -189,3 +197,77 @@ img {
 .bottom-span.inline.bold {
   font-weight: bold;
 }
+
+#restaurant-grid-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+#bars-grid-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+#landmarks-grid-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+#parks-grid-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+#museums-grid-div {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr) !important;
+}
+
+#restaurants-events h3{
+
+ margin-left: 40%;
+}
+
+#bars-events h3{
+
+margin-left: 40%;
+}
+
+#landmarks-events h3{
+
+margin-left: 40%;
+}
+
+#parks-events h3{
+
+margin-left: 40%;
+}
+
+#museums-events h3 {
+
+  margin-left: 40%;
+}
+
+#restaurants-events{
+
+
+}
+
+/* #bars-events{
+
+background-color: #0B76C4
+}
+
+#landmarks-events{
+
+background-color: #FF5669
+}
+
+#parks-events{
+
+background-color: #FFDCD9
+}
+
+#museums-events {
+
+  background-color: #EBF2F5
+} */

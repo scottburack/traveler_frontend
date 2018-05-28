@@ -8,7 +8,6 @@ const userId = 1
 
 let showContainer = document.getElementById('show-container')
 let tripEventForm = document.getElementById("trip-event-form")
-let categoryContainer = document.getElementById("category-container")
 document.addEventListener("DOMContentLoaded", function(){
 
 //#####################RENDER TRIPS TO PAGE
@@ -20,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
   let renderTrips = (json) => {
     tripsList.innerHTML = ""
-    categoryContainer.innerHTML = ""
     json.forEach(function(trip){
 
       let tripElement = document.createElement('div')
@@ -45,40 +43,20 @@ document.addEventListener("DOMContentLoaded", function(){
   /////// RENDERING EVENTS FOR SPECIFIC TRIP
   function getTripEvents() {
     let tripDivs = document.getElementsByClassName("trip-div")
-    let categoryContainer = document.getElementById('category-container')
     // debugger
     for (let i = 0; i < tripDivs.length; i++) {
       tripDivs[i].addEventListener("click", function(e) {
         let tripId;
         if(e.target.tagName !== "BUTTON" && e.target.tagName !== "I") {
           showContainer.innerHTML = ""
-<<<<<<< HEAD
-          categoryContainer.innerHTML = (`
-              <div class='event-category-div' id="restaurants-events"><h3>Restaurants</h3><div id='restaurant-grid-div'></div></div>
-              <br>
-              <div class='event-category-div' id="bars-events"><h3>Bars</h3><div id='bars-grid-div'></div></div>
-              <br>
-              <div class='event-category-div' id="landmarks-events"><h3>Landmarks</h3><div id='landmarks-grid-div'></div></div>
-              <br>
-              <div class='event-category-div' id="museums-events"><h3>Museums</h3><div id='museums-grid-div'></div></div>
-              <br>
-              <div class='event-category-div' id="parks-events"><h3>Parks</h3><div id='parks-grid-div'></div></div>
-            `)
-        // tripEventForm.style.display = 'block'
-        // debugger
-          let tripId = e.target.parentElement.children[1].dataset.id
-=======
           if (e.target.className === 'bottom-span' || e.target.className === 'trip-info') {
             tripId = e.target.parentElement.dataset.id
           } else {
             tripId = e.target.parentElement.children[1].dataset.id
           }
->>>>>>> scott
           fetch(RAILS_TRIP_API + tripId + '/' + 'events')
           .then(resp => resp.json())
           .then(json => renderTripEvents(json))
-
-
 
           let eventDivs = document.getElementsByClassName('trip-info')
           for (let i = 0; i < eventDivs.length; i++) {
@@ -91,13 +69,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   }
 
-  function showEventsInCategory(e){
-    for(let i = 0; i < e.target.parentElement.children.length; i++){
-      // debugger
-
-
-      e.target.parentElement.children[1].style.display = 'grid'}
-  }
   function renderTripEvents(json) {
     json.forEach(function(json){
       let eventName = json.name
@@ -105,24 +76,13 @@ document.addEventListener("DOMContentLoaded", function(){
       let eventImageURL = json.imgURL
       let eventURL = json.url
       let eventDiv = document.createElement('div')
-      //########CATEGORY DIVS
-    let restaurantsDiv = document.getElementById('restaurants-events')
-    // restaurantsDiv.style.display = 'block'
-    let barsDiv = document.getElementById('bars-events')
-    // barsDiv.style.display = 'block'
-    let landmarksDiv = document.getElementById('landmarks-events')
-    // landmarksDiv.style.display = 'block'
-    let museumsDiv = document.getElementById('museums-events')
-    // museumsDiv.style.display = 'block'
-    let parksDiv = document.getElementById('parks-events')
-    // parksDiv.style.display = 'block'
       eventDiv.className = 'event-info'
       eventDiv.dataset.id = json.id
 
       eventDiv.innerHTML =
         `
         <a class='image-link' href=${eventURL} target='_blank'>
-
+        <p>Category: ${eventCategory}</p>
         <div class='event-img'>
         <img src=${eventImageURL}>
         <figcaption class="polaroid-caption">${eventName}</figcaption>
@@ -130,82 +90,14 @@ document.addEventListener("DOMContentLoaded", function(){
         <i class="fa fa-trash-o event-trash-button trash alternate outline icon"></i>
         </div>
         `
-      // showContainer.append(eventDiv)
-      let restaurantGridDiv = document.getElementById('restaurant-grid-div')
-      let barsGridDiv = document.getElementById('bars-grid-div')
-      let landmarksGridDiv = document.getElementById('landmarks-grid-div')
-      let museumsGridDiv = document.getElementById('musuems-grid-div')
-      let parksGridDiv = document.getElementById('parks-grid-div')
-
-      switch (eventCategory) {
-       case 'restaurants':
-
-         restaurantGridDiv.append(eventDiv)
-
-         console.log(eventCategory)
-         break;
-       case 'bars':
-
-         barsGridDiv.append(eventDiv)
-
-         console.log(eventCategory)
-         break;
-       case 'landmarks':
-       // landmarksDiv.innerHTML = '<h2> Landmarks</h2>'
-
-         landmarksGridDiv.append(eventDiv)
-         // eventDiv.style.display = 'none'
-         // landmarksDiv.style.backgroundColor = "green"
-
-         tripsGridList.append(landmarksDiv)
-         console.log(eventCategory)
-         break;
-       case 'museums':
-       // museumsDiv.innerHTML = '<h2> Museums</h2>'
-
-         museumsGridDiv.append(eventDiv)
-         // eventDiv.style.display = 'none'
-         // museumsDiv.style.backgroundColor = "magenta"
-
-         tripsList.append(museumsDiv)
-         console.log(eventCategory)
-         break;
-       case 'parks':
-        // parksDiv.innerHTML = '<h2> Parks</h2>'
-         parksDiv.append(eventDiv)
-         // eventDiv.style.display = 'none'
-         // parksDiv.style.backgroundColor = "red"
-
-         tripsList.append(parksDiv)
-         console.log(eventCategory)
-         break;
-       default:
-         console.log('Something went wrong')
-     }
+      showContainer.append(eventDiv)
     })
-
-
-    let categoryDivs = document.getElementsByClassName('event-category-div')
-    for(let i = 0; i < categoryDivs.length; i++){
-      for(let j = 1; j < categoryDivs[i].children.length; j++){
-
-          categoryDivs[i].children[j].style.display = 'none'
-      }
-
-    }
-    for(let i = 0; i < categoryDivs.length; i++){
-      categoryDivs[i].addEventListener('click', showEventsInCategory)
-    }
-
-
-
 
     let eventTrashBtns = document.getElementsByClassName('event-trash-button')
     for (let i = 0; i < eventTrashBtns.length; i++) {
       eventTrashBtns[i].addEventListener('click', deleteEvent)
     }
   }
-
 
   ////// DELETE EVENT ////////
 

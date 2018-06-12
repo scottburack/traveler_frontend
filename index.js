@@ -46,17 +46,21 @@ document.addEventListener("DOMContentLoaded", function(){
     // debugger
     for (let i = 0; i < tripDivs.length; i++) {
       tripDivs[i].addEventListener("click", function(e) {
-        if(e.target.tagName !== "BUTTON" && e.target.tagName !== "I"){
+        let tripId;
+        if(e.target.tagName !== "BUTTON" && e.target.tagName !== "I") {
           showContainer.innerHTML = ""
-        // tripEventForm.style.display = 'block'
-          let tripId = e.target.parentElement.children[1].dataset.id
+          if (e.target.className === 'bottom-span' || e.target.className === 'trip-info') {
+            tripId = e.target.parentElement.dataset.id
+          } else {
+            tripId = e.target.parentElement.children[1].dataset.id
+          }
           fetch(RAILS_TRIP_API + tripId + '/' + 'events')
           .then(resp => resp.json())
           .then(json => renderTripEvents(json))
 
           let eventDivs = document.getElementsByClassName('trip-info')
           for (let i = 0; i < eventDivs.length; i++) {
-            if (eventDivs[i].dataset.id !== e.target.parentElement.parentElement.dataset.id) {
+            if (eventDivs[i].dataset.id !== e.target.parentElement.parentElement.dataset.id && eventDivs[i].dataset.id !== e.target.parentElement.dataset.id) {
               eventDivs[i].style.display = 'none'
             }
           }
@@ -150,8 +154,6 @@ document.addEventListener("DOMContentLoaded", function(){
 
 let addTripButton = document.getElementById('add-trip')
 addTripButton.addEventListener('click', function(){
-
-    console.log('yoooo')
 		$(".ui.modal.trips").modal('show');
 
 });
